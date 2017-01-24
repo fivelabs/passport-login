@@ -1,0 +1,17 @@
+{
+    "name": "fivelabs/passport-login",
+    "description": "Laravel Passport login controller and routes.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Five Labs",
+            "email": "engineering@fivelabs.co"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "laravel/passport": "^1.0",
+        "barryvdh/laravel-cors": "^0.8.2"
+    }
+}
