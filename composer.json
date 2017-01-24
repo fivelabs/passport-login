@@ -7,11 +7,25 @@
         {
             "name": "Five Labs",
             "email": "engineering@fivelabs.co"
+        },
+        {
+            "name": "Osvaldo Brignoni",
+            "email": "hello@obrignoni.com"
         }
     ],
-    "minimum-stability": "dev",
     "require": {
         "laravel/passport": "^1.0",
         "barryvdh/laravel-cors": "^0.8.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Fivelabs\\PassportLogin\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
     }
 }
