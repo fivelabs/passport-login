@@ -1,11 +1,11 @@
 <?php namespace Fivelabs\PassportLogin;
 
 use App\User;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Laravel\Passport\PersonalAccessTokenResult;
 
 class PassportLoginController extends \Laravel\Passport\Http\Controllers\PersonalAccessTokenController
 {
@@ -97,16 +97,13 @@ class PassportLoginController extends \Laravel\Passport\Http\Controllers\Persona
     /**
      * The user has been authenticated.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  mixed  $user
+     * @param  Request  $request
+     * @param  Authenticatable|User $user
      * @return mixed
      */
     protected function authenticated(Request $request, $user)
     {
-        return $this->getTokenResponse(
-            $user,
-            $user->createToken($this->getTokenName($user, $request))
-        );
+        return $this->getTokenResponse($request, $user);
     }
 
     /**
@@ -151,27 +148,49 @@ class PassportLoginController extends \Laravel\Passport\Http\Controllers\Persona
     }
 
     /**
+     * @param Request $request
+     * @return array|Response|User
+     */
+    public function user(Request $request)
+    {
+        return $this->getUserResponse($request, $this->guard()->user());
+    }
+
+    /**
+     * @param Request $request
+     * @param  Authenticatable|User $user
+     * @return User
+     */
+    protected function getUserResponse(Request $request, $user) {
+        return $user;
+    }
+
+    /**
      * Get the token name used to create the new token.
      *
-     * @param $user
      * @param Request $request
+     * @param  Authenticatable|User $user
      * @return string
      */
-    public function getTokenName($user, Request $request)
+    public function getTokenName(Request $request, $user)
     {
         return "User #{$user->id} - {$user->email} - {$request->ip()}";
     }
 
     /**
-     * @param User $user
-     * @param PersonalAccessTokenResult $personalAccessTokenResult
+     * @param Request $request
+     * @param  Authenticatable|User $user
+     * @param array $scopes
      * @return array
      */
-    protected function getTokenResponse(User $user, PersonalAccessTokenResult $personalAccessTokenResult)
+    protected function getTokenResponse(Request $request, $user, array $scopes = [])
     {
+        $personalAccessTokenResult = $user->createToken($this->getTokenName($request, $user), $scopes);
+
         return [
             'accessToken' => $personalAccessTokenResult->accessToken,
             'accessTokenId' => $personalAccessTokenResult->token->id,
+            'scopes' => $scopes,
         ];
     }
 

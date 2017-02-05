@@ -2,9 +2,11 @@
 
 return [
 
-    'login_method' => 'Fivelabs\PassportLogin\PassportLoginController@login',
+    'login' => 'Fivelabs\PassportLogin\PassportLoginController@login',
 
-    'logout_method' => 'Fivelabs\PassportLogin\PassportLoginController@logout',
+    'logout' => 'Fivelabs\PassportLogin\PassportLoginController@logout',
+
+    'user' => 'Fivelabs\PassportLogin\PassportLoginController@user',
 
     'username' => 'email',
 

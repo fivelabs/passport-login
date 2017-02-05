@@ -59,8 +59,16 @@ class PassportLoginServiceProvider extends RouteServiceProvider
             'middleware' => ['cors'],
         ], function (Router $router) {
 
-            $router->post('login', config('passport_login.login_method'));
-            $router->post('logout/{tokenId}', config('passport_login.logout_method'))->middleware('api');
+            $router->post('login', config('passport_login.login'));
+
+            $router->group([
+                'middleware' => ['api', 'auth:api'],
+            ], function(Router $router) {
+
+                $router->get('user', config('passport_login.user'));
+                $router->delete('logout/{tokenId}', config('passport_login.logout'));
+
+            });
 
         });
 
